@@ -48,9 +48,31 @@ class GarminWeightData(JsonFileProcessor):
         weight_list = json_data['dateWeightList']
         if len(weight_list) > 0:
             weight = fitfile.Weight.from_grams(weight_list[0]['weight'])
+            bmi = weight_list[0]['bmi']
+            bodyFat = fitfile.Weight.from_grams(weight_list[0]['bodyFat'])
+            bodyWater = fitfile.Weight.from_grams(weight_list[0]['bodyWater'])
+            boneMass = fitfile.Weight.from_grams(weight_list[0]['boneMass'])
+            muscleMass = fitfile.Weight.from_grams(weight_list[0]['muscleMass'])
+            physiqueRating = weight_list[0]['physiqueRating']
+            visceralFat = fitfile.Weight.from_grams(weight_list[0]['visceralFat'])
+            metabolicAge = weight_list[0]['metabolicAge']
+            sourceType = weight_list[0]['sourceType']
+            timestampGMT = weight_list[0]['timestampGMT']
+            weightDelta = weight_list[0]['weightDelta']
             point = {
                 'day': json_data['startDate'].date(),
-                'weight': weight.kgs_or_lbs(self.measurement_system)
+                'weight': weight.kgs_or_lbs(self.measurement_system),
+                'bmi': bmi,
+                'bodyFat': bodyFat.kgs_or_lbs(self.measurement_system),
+                'bodyWater': bodyWater.kgs_or_lbs(self.measurement_system),
+                'boneMass': boneMass.kgs_or_lbs(self.measurement_system),
+                'muscleMass': muscleMass.kgs_or_lbs(self.measurement_system),
+                'physiqueRating': physiqueRating,
+                'visceralFat': visceralFat.kgs_or_lbs(self.measurement_system),
+                'metabolicAge': metabolicAge,
+                'sourceType': sourceType,
+                'timestampGMT': timestampGMT,
+                'weightDelta': weightDelta.kgs_or_lbs(self.measurement_system),
             }
             Weight.insert_or_update(self.garmin_db, point)
             return 1
